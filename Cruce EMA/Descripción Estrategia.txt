@@ -1,0 +1,9 @@
+Estrategia de trading basada en el cruce de tres medias móviles exponenciales: la EMA 9 (rápida), la EMA 21 (intermedia) y la EMA 50 (lenta, que funciona como filtro de tendencia). Es un enfoque clásico de seguimiento de tendencia.
+
+Para una posición larga, la entrada se produce cuando la EMA 9 cruza por encima de la EMA 21 y, al mismo tiempo, el precio se encuentra por encima de la EMA 50, lo que confirma que la tendencia de fondo es alcista. La salida de esa posición ocurre cuando se revierte la condición: la EMA 9 cruza por debajo de la EMA 21 y el precio queda por debajo de la EMA 50.
+
+Para una posición corta, la lógica es simétrica pero invertida. La entrada se da cuando la EMA 9 cruza por debajo de la EMA 21 mientras el precio está por debajo de la EMA 50, confirmando una tendencia bajista. La salida se produce cuando la EMA 9 vuelve a cruzar por encima de la EMA 21 y el precio recupera la EMA 50.
+
+Además del sistema de cruces, se agregan algunos principios sobre soporte y resistencia: los niveles de soporte son zonas donde dominan los compradores, mientras que los de resistencia son zonas donde dominan los vendedores. Una ruptura alcista sobre una resistencia se interpreta como señal alcista, y una ruptura bajista bajo un soporte se interpreta como señal bajista. También señala que soporte y resistencia pueden intercambiar roles una vez rotos, es decir, un soporte roto puede convertirse en resistencia y viceversa.
+
+En términos generales, esto es un sistema de cruce de medias móviles con un filtro de tendencia, lo que ayuda a reducir señales falsas en comparación con usar solo dos EMAs, aunque no las elimina del todo, especialmente en mercados laterales o sin tendencia clara. Para disminuir ese riesgo, utiliza confirmación por volumen antes de realizar una operación (esta todo detallado en el skill para construir asesores expertos en MQL5)

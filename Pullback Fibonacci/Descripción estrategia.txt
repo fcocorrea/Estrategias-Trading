@@ -1,0 +1,15 @@
+Estrategia de pullback basada en retrocesos de Fibonacci, pensada para operar a favor de una tendencia ya establecida, esperando una corrección temporal antes de continuar el movimiento original.
+
+Lo primero es confirmar que existe una tendencia clara antes de trazar cualquier Fibonacci. Esto se puede hacer con una media móvil, por ejemplo la EMA 50 o la EMA 200: si el precio está por encima de ella se buscan solo posiciones largas, y si está por debajo, solo posiciones cortas. También ayuda observar la secuencia de máximos y mínimos, que deben ser crecientes en una tendencia alcista o decrecientes en una bajista.
+
+Una vez confirmada la tendencia, se traza el retroceso de Fibonacci sobre el último impulso claro. En una tendencia alcista, se traza desde el mínimo más reciente hasta el máximo más reciente, y en una tendencia bajista, desde el máximo más reciente hasta el mínimo más reciente. Los niveles clave a vigilar son 38.2, 50 y 61.8 por ciento, siendo la zona entre 50 y 61.8 considerada la "zona dorada" por tener históricamente mayor tasa de rebote.
+
+Para una posición larga dentro de una tendencia alcista, se espera que el precio retroceda hasta esa zona entre 38.2 y 61.8 por ciento. En lugar de comprar automáticamente al tocar el nivel, conviene esperar una señal de confirmación, como un patrón de velas de reversión (envolvente alcista, martillo, pin bar), un cruce alcista de EMAs rápidas, o una divergencia alcista en RSI o MACD. La entrada se ejecuta al cierre de esa vela de confirmación o en el quiebre de su máximo.
+
+Para una posición corta dentro de una tendencia bajista, la lógica es la misma pero invertida. Se espera el retroceso hacia la misma zona de 38.2 a 61.8 por ciento, y se confirma con un patrón de velas bajista, un cruce bajista de EMAs, o una divergencia bajista en el oscilador elegido. La entrada se ejecuta al cierre de la vela de confirmación o en el quiebre de su mínimo.
+
+El stop loss se coloca justo por debajo del nivel 61.8 por ciento en posiciones largas, o justo por encima del 61.8 por ciento en posiciones cortas. Esto funciona como punto de invalidación claro: si el precio perfora ese nivel, la hipótesis de pullback se descarta porque sugiere que la tendencia se está agotando o revirtiendo.
+
+Los objetivos de toma de ganancias se pueden fijar usando extensiones de Fibonacci del mismo impulso, siendo comunes el 127.2 y el 161.8 por ciento como primer y segundo objetivo. También se puede usar el máximo previo, en el caso de largos, o el mínimo previo, en el caso de cortos, como primer objetivo, dejando correr una porción de la posición con un trailing stop hacia el segundo objetivo.
+
+Como filtros adicionales, conviene exigir que el volumen disminuya durante el retroceso y aumente en la vela de confirmación, evitar operar si el retroceso supera el 78.6 por ciento, ya que en ese punto se trata más de un posible cambio de tendencia que de un pullback, y verificar que la zona de Fibonacci coincida con un soporte o resistencia previo, ya que esa confluencia de niveles aumenta la probabilidad de que el rebote funcione.
