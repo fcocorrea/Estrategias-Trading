@@ -3,6 +3,12 @@
 //|      Cruce EMA9/EMA21 con filtro de tendencia EMA50, filtro     |
 //|      de volumen y RSI, operativa solo al cierre de vela.        |
 //|                                                                    |
+//| Salida: con SL y TP desactivados, la operación se cierra en el   |
+//| cruce contrario de EMA9/EMA21, sin importar la tendencia, y en la|
+//| misma vela se evalúa una nueva entrada (que sí exige el filtro   |
+//| de tendencia EMA50). Con SL o TP activos, la salida es la        |
+//| reversión simultánea de cruce y tendencia.                       |
+//|                                                                    |
 //| Nota: la descripción de estrategia menciona soporte/resistencia  |
 //| (zonas de dominio comprador/vendedor, rupturas, intercambio de   |
 //| roles) como principio cualitativo, pero no define un método      |
@@ -36,9 +42,9 @@ input group "ATR"
 input int    InpAtrPeriod          = 14;    // Período ATR
 
 input group "Stop Loss / Take Profit"
-input bool   InpUseStopLoss        = true;  // Activar stop loss
+input bool   InpUseStopLoss        = true;  // Activar stop loss (con SL y TP desactivados, la operación se cierra en el cruce de EMA contrario)
 input double InpSlAtrMultiplier    = 2.0;   // Stop loss = ATR x este múltiplo
-input bool   InpUseTakeProfit      = true;  // Activar take profit
+input bool   InpUseTakeProfit      = true;  // Activar take profit (con SL y TP desactivados, la operación se cierra en el cruce de EMA contrario)
 input double InpTpAtrMultiplier    = 4.0;   // Take profit = ATR x este múltiplo
 
 input group "Break Even"
@@ -210,6 +216,23 @@ public:
          return (cross == -1 && trend == -1);
       if(positionDirection == -1)
          return (cross == 1 && trend == 1);
+
+      return false;
+     }
+
+   //--- Cruce contrario a la posición abierta, sin considerar la tendencia: una compra se
+   //--- cierra cuando la EMA rápida cruza por debajo de la intermedia, y una venta cuando
+   //--- cruza por encima.
+   bool              IsOppositeCross(int positionDirection)
+     {
+      int cross;
+      if(!GetCross(cross))
+         return false;
+
+      if(positionDirection == 1)
+         return (cross == -1);
+      if(positionDirection == -1)
+         return (cross == 1);
 
       return false;
      }
@@ -588,6 +611,9 @@ private:
    bool              m_useTp;
    double            m_tpAtrMul;
 
+   //--- true si SL y TP están desactivados: la operación termina en el cruce de EMA contrario
+   bool              m_closeOnCross;
+
    //--- Dirección de la posición abierta actual en este símbolo/magic (1, -1, 0 = sin posición)
    int               GetOpenPositionDirection(void)
      {
@@ -672,6 +698,8 @@ public:
       m_useTp    = useTp;
       m_tpAtrMul = tpAtrMul;
 
+      m_closeOnCross = !useSl && !useTp;
+
       m_trade.SetExpertMagicNumber(magicNumber);
       m_trade.SetDeviationInPoints(slippage);
       m_trade.SetTypeFilling(ORDER_FILLING_FOK);
@@ -708,12 +736,29 @@ public:
 
       int openDirection = GetOpenPositionDirection();
 
-      //--- Regla 4: si ya hay posición abierta, solo se evalúa su salida (reversión del cruce/tendencia)
+      //--- Regla 4: si ya hay posición abierta, solo se evalúa su salida
       if(openDirection != 0)
         {
-         if(m_emaSignal.IsExitSignal(openDirection))
-            ClosePosition();
-         return;
+         if(m_closeOnCross)
+           {
+            //--- Sin SL ni TP: la operación termina en el cruce contrario, sin importar la
+            //--- tendencia. Si el cierre se ejecutó, se sigue a evaluar la entrada de esta
+            //--- misma vela, que solo abrirá si el filtro de tendencia EMA50 se cumple.
+            if(!m_emaSignal.IsOppositeCross(openDirection))
+               return;
+
+            Print(__FUNCTION__, ": cruce de EMA contrario a la ", (openDirection == 1 ? "compra" : "venta"),
+                  " abierta; se cierra la operación");
+            if(!ClosePosition())
+               return;
+           }
+         else
+           {
+            //--- Con SL o TP: reversión simultánea de cruce y tendencia
+            if(m_emaSignal.IsExitSignal(openDirection))
+               ClosePosition();
+            return;
+           }
         }
 
       int direction = m_emaSignal.GetEntryDirection();
