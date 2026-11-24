@@ -1,13 +1,11 @@
 # Asesores Expertos NP — Niveles de soporte y resistencia (MQL5)
 
-Dos Asesores Expertos (EA) independientes para MetaTrader 5, derivados de `NP Estrategia.mq5`. Ambos comparten el mismo motor de detección de soportes y resistencias, pero implementan estrategias distintas.
+Dos Asesores Expertos (EA) independientes para MetaTrader 5, derivados del EA original `NP Estrategia`. Ambos comparten el mismo motor de detección de soportes y resistencias, pero implementan estrategias distintas.
 
 | Archivo | Estrategia |
 |---|---|
 | `NP_StopLossEstructural.mq5` | Compras de largo plazo sobre soportes, evaluadas **al tick**, con SL y TP estructurales. |
 | `NP_Niveles.mq5` | Compras y ventas sobre niveles, evaluadas **al cierre de vela**, con confirmación de volumen y SL/TP por ATR. |
-
-`NP Estrategia.mq5` se conserva como referencia del EA original; ya no es la fuente de estos dos.
 
 ## Comparación rápida
 
